@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Configure Role</title>
+</head>
+<body>
+
+<!-- Форма добавления роли -->
+<form th:action="@{/addrole}" th:if="${role.id == null}" th:object="${role}" method="post">
+    <label>Role:</label>
+    <input type="text" th:field="*{name}" required/><br/>
+    <button type="submit" th:text="${role.id == null} ? 'Save Role' : 'Update Role'"></button>
+</form>
+
+<!-- Форма редактирования роли -->
+<form th:action="@{/editrole}" th:unless="${role.id == null}" th:object="${role}" method="post">
+    <input type="hidden" th:field="*{id}"/> <!-- Передача id в скрытом поле -->
+
+    <label>Role:</label>
+    <input type="text" th:field="*{name}" required/><br/>
+
+    <button type="submit" th:text="${role.id == null} ? 'Save Role' : 'Update Role'"></button>
+</form>
+
+<!-- Кнопка выхода -->
+<tr><td colspan="5">&nbsp;</td></tr>
+<form th:action="@{/logout}" method="post">
+    <button type="submit">Logout</button>
+</form>
+
+</body>
+</html>
+
+

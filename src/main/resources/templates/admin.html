@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User list</title>
+</head>
+<body>
+<h1>Admin, welcome spring boot security page!</h1>
+<h2>User list</h2>
+<table border="1">
+    <thead>
+    <tr>
+        <th>id</th>
+        <th>username</th>
+        <th>password</th>
+        <th>roles</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${allUsers}">
+        <td th:text="${user.id}"></td>
+        <td th:text="${user.username}"></td>
+        <td th:text="${user.password}"></td>
+        <td>
+            <span th:each="role : ${user.roles}" th:text="${role.name} + ' '"></span>
+        </td>
+        <td>
+            <a th:href="@{/edit(id=${user.id})}">Edit</a>
+            <a th:href="@{/delete(id=${user.id})}" th:if="${user.username != 'admin'}">Delete</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<a th:href="@{/add}">Add User</a>
+
+<h2>Role list</h2>
+<table border="1">
+    <thead>
+    <tr>
+        <th>id</th>
+        <th>role</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="role : ${allRoles}">
+        <td th:text="${role.id}"></td>
+        <td th:text="${role.name}"></td>
+        <td>
+            <a th:href="@{/editrole(id=${role.id})}">Edit</a>
+            <a th:href="@{/deleterole(id=${role.id})}">Delete</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<a th:href="@{/addrole}">Add Role</a>
+
+<br> <!-- Разрыв строки -->
+<div style="margin-top: 20px;"></div>
+
+<form th:action="@{/logout}" method="post">
+    <button type="submit">Logout</button>
+</form>
+</body>
+</html>

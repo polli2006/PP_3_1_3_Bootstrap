@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Configure User</title>
+</head>
+<body>
+
+<!-- Вывод ошибки -->
+<div th:if="${error}" style="color: red;">
+    <p th:text="${error}"></p>
+</div>
+
+<!-- Форма добавления пользователя -->
+<form th:action="@{/add}" th:if="${user.id == null}" th:object="${user}" method="post">
+    <label>Username:</label>
+    <input type="text" th:field="*{username}" required/><br/>
+
+    <label>Password:</label>
+    <input type="password" th:field="*{password}" required/><br/>
+
+    <label>Roles:</label><br/>
+    <div th:each="role : ${allRoles}">
+        <input type="checkbox" name="roles" th:value="${role.id}"
+               th:checked="${user.roles != null and #lists.contains(user.roles, role)}"/>
+        <label th:text="${role.name}"></label><br/>
+    </div>
+
+    <button type="submit" th:text="${user.id == null} ? 'Save User' : 'Update User'"></button>
+</form>
+
+<!-- Форма редактирования пользователя -->
+<form th:action="@{/edit(id=${user.id})}" th:unless="${user.id == null}" th:object="${user}" method="post">
+    <label>Username:</label>
+    <input type="text" th:field="*{username}" required/><br/>
+
+    <label>Password:</label>
+    <input type="password" th:field="*{password}" required/><br/>
+
+    <label>Roles:</label><br/>
+    <div th:each="role : ${allRoles}">
+        <input type="checkbox" name="roles" th:value="${role.id}"
+               th:checked="${user.roles != null and #lists.contains(user.roles, role)}"/>
+        <label th:text="${role.name}"></label><br/>
+    </div>
+
+    <button type="submit" th:text="${user.id == null} ? 'Save User' : 'Update User'"></button>
+</form>
+
+<!-- Кнопка Logout -->
+<form th:action="@{/logout}" method="post">
+    <button type="submit">Logout</button>
+</form>
+
+</body>
+</html>
