@@ -9,8 +9,8 @@ import java.util.List;
 public interface UserService {
     public User getUser(long id);
     void deleteUser(long id);
-    void addUser(User user);
-    void updateUser(User user);
+    void addUser(User user, List<Role> roles);
+    void updateUser(long id, User user, List<Role> roles);
     List<User> listUsers();
     UserDetails loadUserByUsername(String username);  // Добавляем метод
 

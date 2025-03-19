@@ -8,8 +8,7 @@ import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 import javax.annotation.PostConstruct;
-import java.util.Collections;
-import java.util.Set;
+import java.util.List;
 
 @Component
 public class DataInitializer {
@@ -29,26 +28,25 @@ public class DataInitializer {
     public void init() {
         Role adminRole = new Role(1L, "ROLE_ADMIN");
         Role userRole = new Role(2L, "ROLE_USER");
-        if (roleService.listRoles().isEmpty()) { // Проверяем, есть ли уже пользователи
-            // Создаем роли
-            roleService.addRole(adminRole);  // Сохраняем роли в БД
+        if (roleService.listRoles().isEmpty()) {
+
+            roleService.addRole(adminRole);
             roleService.addRole(userRole);
         }
         if (userService.listUsers().isEmpty()) {
-                // Создаем пользователей и кодируем пароли
+
             User userAdmin = new User();
             userAdmin.setUsername("admin");
-            userAdmin.setPassword(passwordEncoder.encode("admin"));
-            userAdmin.setRoles(Collections.singleton(adminRole)); // Назначаем роль
+            userAdmin.setPassword("admin");
+
 
             User userUser = new User();
             userUser.setUsername("user");
-            userUser.setPassword(passwordEncoder.encode("user"));
-            userUser.setRoles(Collections.singleton(userRole)); // Назначаем роль
+            userUser.setPassword("user");
 
-            // Добавляем пользователей в базу данных
-            userService.addUser(userAdmin);
-            userService.addUser(userUser);
+
+            userService.addUser(userAdmin, List.of(adminRole));
+            userService.addUser(userUser, List.of(userRole));
 
             System.out.println("Тестовые пользователи добавлены!");
         } else {

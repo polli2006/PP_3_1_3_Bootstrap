@@ -16,8 +16,6 @@ import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Controller
 public class HelloController {
@@ -52,14 +50,9 @@ public class HelloController {
 
 	@GetMapping("/deleterole")
 	public String deleteRole(@RequestParam("id") long id) {
-		try {
-			roleService.deleteRole(id);
-			return "redirect:/admin";
-		}
-		catch (Exception e) {
-			System.out.println(e.getMessage());
-			return "redirect:/admin";
-		}
+		roleService.deleteRole(id);
+		return "redirect:/admin";
+
 	}
 
 	@GetMapping("/add")
@@ -71,36 +64,10 @@ public class HelloController {
 
 	@PostMapping("/add")
 	public String addUser(@ModelAttribute User user,
-						  @RequestParam(value = "roles", required = false) List<Long> roles,
+						  @RequestParam(value = "roles", required = false) List<Role> roles,
 						  Model model) {
 
-		if (roles == null || roles.isEmpty()) {
-			model.addAttribute("error", "Please select at least one role.");
-			model.addAttribute("allRoles", roleService.listRoles());
-			return "user-form"; // возвращаемся на страницу с ошибкой
-		}
-		// Проверяем, есть ли уже пользователь с таким username
-		if (userService.loadUserByUsername(user.getUsername()) != null) {
-			model.addAttribute("error", "This username is already in use!");
-			model.addAttribute("user", user);
-			model.addAttribute("allRoles", roleService.listRoles());
-			return "user-form";  // Возвращаем форму с ошибкой
-		}
-
-		// Убираем дублирующиеся роли
-		Set<Role> updatedRoles = roles.stream()
-				.map(roleService::getRole)
-				.collect(Collectors.toSet());
-
-		user.setRoles(updatedRoles);
-
-		// Если пароль не пустой, кодируем его
-		if (user.getPassword() != null && !user.getPassword().isEmpty()) {
-			user.setPassword(passwordEncoder.encode(user.getPassword()));
-		}
-
-		// Добавляем пользователя в базу данных
-		userService.addUser(user);
+		userService.addUser(user, roles);
 		return "redirect:/admin";
 	}
 
@@ -125,17 +92,7 @@ public class HelloController {
 
 	@PostMapping("/editrole")
 	public String updateRole(@RequestParam("id") long id, @ModelAttribute Role role) {
-		Role oldRole = roleService.getRole(id);
-
-		for (User users: userService.listUsers()) {
-			if (users.getRoles().contains(oldRole)) {
-				users.getRoles().remove(oldRole);
-				users.getRoles().add(role);
-				userService.updateUser(users);
-			}
-		}
-		role.setId(id);
-		roleService.addRole(role);
+		roleService.updateRole(id, role);
 		return "redirect:/admin";
 	}
 
@@ -153,33 +110,9 @@ public class HelloController {
 	public String updateUser(@RequestParam("id") long id,
 							 @ModelAttribute User user,
 							 Model model,
-							 @RequestParam(value = "roles", required = false) List<Long> roles) {
+							 @RequestParam(value = "roles", required = false) List<Role> roles) {
 
-		if (roles == null || roles.isEmpty()) {
-			model.addAttribute("error", "Please select at least one role.");
-			model.addAttribute("allRoles", roleService.listRoles());
-			return "user-form"; // возвращаемся на страницу с ошибкой
-		}
-
-		User existingUser = userService.getUser(id);
-		if (existingUser == null) {
-			model.addAttribute("error", "User not found.");
-			return "user-form";
-		}
-
-		user.setId(id);
-		if (user.getPassword() == null || user.getPassword().isEmpty()) {
-			user.setPassword(existingUser.getPassword()); // Оставляем старый пароль
-		} else {
-			user.setPassword(passwordEncoder.encode(user.getPassword()));
-		}
-
-		Set<Role> updatedRoles = roles.stream()
-				.map(roleService::getRole)
-				.collect(Collectors.toSet());
-		user.setRoles(updatedRoles);
-
-		userService.updateUser(user);
+		userService.updateUser(id, user, roles);
 		return "redirect:/admin";
 	}
 
