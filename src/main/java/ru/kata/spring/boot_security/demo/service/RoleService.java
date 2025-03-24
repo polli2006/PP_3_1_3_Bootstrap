@@ -11,4 +11,5 @@ public interface RoleService {
     void updateRole(long id, Role role);
     List<Role> listRoles();
 
+    List<Role> listRolesByIds(List<Long> roleIds);
 }

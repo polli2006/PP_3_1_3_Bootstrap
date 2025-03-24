@@ -59,4 +59,9 @@ public class RoleServiceImpl implements RoleService {
         return roleDao.findAll();
     }
 
+    @Override
+    public List<Role> listRolesByIds(List<Long> ids) {
+        return roleDao.findAllById(ids);  // Используем репозиторий для поиска ролей по ID
+    }
+
 }

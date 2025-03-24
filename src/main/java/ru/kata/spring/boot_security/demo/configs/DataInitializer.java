@@ -26,8 +26,8 @@ public class DataInitializer {
 
     @PostConstruct
     public void init() {
-        Role adminRole = new Role(1L, "ROLE_ADMIN");
-        Role userRole = new Role(2L, "ROLE_USER");
+        Role adminRole = new Role(1L, "ADMIN");
+        Role userRole = new Role(2L, "USER");
         if (roleService.listRoles().isEmpty()) {
 
             roleService.addRole(adminRole);
@@ -36,16 +36,22 @@ public class DataInitializer {
         if (userService.listUsers().isEmpty()) {
 
             User userAdmin = new User();
-            userAdmin.setUsername("admin");
+            userAdmin.setUsername("admin@mail.ru");
             userAdmin.setPassword("admin");
+            userAdmin.setAge(35);
+            userAdmin.setFirstName("admin");
+            userAdmin.setLastName("admin");
 
 
             User userUser = new User();
-            userUser.setUsername("user");
+            userUser.setUsername("user@mail.ru");
             userUser.setPassword("user");
+            userUser.setAge(30);
+            userUser.setFirstName("user");
+            userUser.setLastName("user");
 
 
-            userService.addUser(userAdmin, List.of(adminRole));
+            userService.addUser(userAdmin, List.of(adminRole, userRole));
             userService.addUser(userUser, List.of(userRole));
 
             System.out.println("Тестовые пользователи добавлены!");

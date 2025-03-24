@@ -29,17 +29,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/", "/index").permitAll()  // Страница доступна для всех
                 .antMatchers("/admin/**").hasRole("ADMIN")  // Страницы admin только для пользователей с ролью ADMIN
                 .anyRequest().authenticated()  // Все остальные страницы требуют аутентификации
                 .and()
                 .formLogin()
-                .successHandler(successUserHandler)  // Хендлер после успешного логина
+                .loginPage("/index")  // Указываем страницу для логина
+                .loginProcessingUrl("/process_login")
+                .successHandler(successUserHandler)
                 .permitAll()  // Страница логина доступна для всех
                 .and()
                 .logout()
-                .logoutSuccessUrl("/")  // После логаута редирект на главную страницу
+                .logoutSuccessUrl("/index")  // После логаута редирект на главную страницу
                 .permitAll();  // Разрешить всем выходить
     }
 

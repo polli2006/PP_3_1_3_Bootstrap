@@ -13,7 +13,7 @@ public interface UserDao extends JpaRepository<User, Long> {
 
     List<User> findByRolesContains(Role role);
 
-    @Query("SELECT u FROM User u JOIN FETCH u.roles WHERE u.username = :username")
-    Optional<User> findByUsername(@Param("username") String username);
+    @Query("SELECT u FROM User u JOIN FETCH u.roles WHERE u.email = :email")
+    Optional<User> findByUsername(@Param("email") String email);
 
 }
