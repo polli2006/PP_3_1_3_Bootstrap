@@ -41,6 +41,12 @@ public class HelloController {
 		return "user";
 	}
 
+	@GetMapping("/useradmin")
+	public String useradminPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+		model.addAttribute("user", userService.loadUserByUsername(userDetails.getUsername()));
+		return "useradmin";
+	}
+
 	@GetMapping("/admin")
 	public String adminPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
 		model.addAttribute("allUsers", userService.listUsers());
