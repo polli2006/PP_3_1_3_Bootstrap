@@ -15,6 +15,7 @@ import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -85,8 +86,12 @@ public class HelloController {
 							 @ModelAttribute User user,
 							 Model model,
 							 @RequestParam(value = "roles", required = false) List<Role> roles) {
+		if (roles != null) {
+			userService.updateUser(id, user, roles);
+		} else {
+			userService.updateUser(id, user, new ArrayList<>(userService.getUser(id).getRoles()));
+		}
 
-		userService.updateUser(id, user, roles);
 		return "redirect:/admin";
 	}
 
