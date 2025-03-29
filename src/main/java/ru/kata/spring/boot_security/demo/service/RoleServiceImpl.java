@@ -1,5 +1,6 @@
 package ru.kata.spring.boot_security.demo.service;
 
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import ru.kata.spring.boot_security.demo.dao.RoleDao;
 import ru.kata.spring.boot_security.demo.dao.UserDao;
@@ -64,4 +65,8 @@ public class RoleServiceImpl implements RoleService {
         return roleDao.findAllById(ids);  // Используем репозиторий для поиска ролей по ID
     }
 
+    @Override
+    public void deleteAllRoles() {
+        roleDao.deleteAll();
+    }
 }

@@ -1,5 +1,6 @@
 package ru.kata.spring.boot_security.demo.configs;
 
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import ru.kata.spring.boot_security.demo.model.Role;
@@ -8,6 +9,7 @@ import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 import javax.annotation.PostConstruct;
+import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -18,7 +20,7 @@ public class DataInitializer {
     private final RoleService roleService;
 
 
-    public DataInitializer(UserService userService, RoleService roleService,BCryptPasswordEncoder passwordEncoder) {
+    public DataInitializer(UserService userService, RoleService roleService, BCryptPasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.roleService = roleService;
         this.passwordEncoder = passwordEncoder;
@@ -26,6 +28,7 @@ public class DataInitializer {
 
     @PostConstruct
     public void init() {
+
         Role adminRole = new Role(1L, "ADMIN");
         Role userRole = new Role(2L, "USER");
         if (roleService.listRoles().isEmpty()) {
@@ -58,5 +61,6 @@ public class DataInitializer {
         } else {
             System.out.println("Пользователи уже есть в базе.");
         }
+
     }
 }

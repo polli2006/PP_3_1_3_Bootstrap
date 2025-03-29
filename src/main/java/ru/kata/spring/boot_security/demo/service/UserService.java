@@ -12,6 +12,5 @@ public interface UserService {
     void addUser(User user, List<Role> roles);
     void updateUser(long id, User user, List<Role> roles);
     List<User> listUsers();
-    UserDetails loadUserByUsername(String username);  // Добавляем метод
-
+    UserDetails loadUserByUsername(String username);
 }

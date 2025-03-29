@@ -31,10 +31,12 @@ public class HelloController {
 		this.roleService = roleService;
 	}
 
+
 	@GetMapping({"/", "/index"})  // Обрабатывает главную страницу
 	public String showLoginPage() {
 		return "index";  // Открывает index.html
 	}
+
 
 	@GetMapping("/user")
 	public String userPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {

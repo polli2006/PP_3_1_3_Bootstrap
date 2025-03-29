@@ -10,6 +10,6 @@ public interface RoleService {
     void addRole(Role role);
     void updateRole(long id, Role role);
     List<Role> listRoles();
-
+    public void deleteAllRoles();
     List<Role> listRolesByIds(List<Long> roleIds);
 }
